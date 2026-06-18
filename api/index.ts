@@ -1,7 +1,8 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { app, connectDatabase } from "../server/src/app.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const { app, connectDatabase } = await import("../server/src/app.js");
+
   if (req.url?.startsWith("/api/health")) {
     return app(req, res);
   }
@@ -9,4 +10,3 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   await connectDatabase();
   return app(req, res);
 }
-

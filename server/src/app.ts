@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
 app.use(async (req, res, next) => {
-  if (req.path === "/health") {
+  if (req.path === "/health" || req.path === "/api/health") {
     return next();
   }
 
@@ -40,4 +40,3 @@ export async function connectDatabase() {
 
   await connectionPromise;
 }
-
