@@ -46,6 +46,21 @@ npm run dev
 
 For local development without Docker, set `MONGODB_URI` in `server/.env`.
 
+## Vercel Deployment
+
+Vercel serves the React client from `client/dist` and the Express API through `api/index.ts`.
+
+Set these production environment variables in Vercel:
+
+```text
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=replace-with-a-long-random-secret
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=replace-with-a-secure-password
+```
+
+Vercel does not run Docker Compose or a MongoDB container. Use MongoDB Atlas or another hosted MongoDB service for production.
+
 ## Features
 
 - Admin login with JWT authentication
@@ -55,4 +70,3 @@ For local development without Docker, set `MONGODB_URI` in `server/.env`.
 - Public form filling route
 - Submission storage and review
 - Seeded sample patient intake form and admin user
-
