@@ -1,5 +1,6 @@
 import {
-  Archive,
+  ArrowRight,
+  CheckCircle2,
   ClipboardList,
   Eye,
   FileText,
@@ -7,6 +8,7 @@ import {
   Plus,
   Save,
   Send,
+  ShieldCheck,
   Trash2
 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
@@ -125,29 +127,38 @@ function Login({ onLogin, navigate }: { onLogin: () => void; navigate: (path: st
   return (
     <main className="login-page">
       <section className="login-panel">
-        <div>
-          <p className="eyebrow">Praxis Form</p>
-          <h1>Admin login</h1>
-          <p className="muted">Manage patient-facing forms, publish updates, and review submissions.</p>
+        <div className="login-art">
+          <img src="/images/admin-workflow.png" alt="Clinic dashboard on a workstation" />
+          <div className="login-art-copy">
+            <p className="eyebrow">Clinic workspace</p>
+            <h1>Paperless intake, ready before the visit.</h1>
+          </div>
         </div>
-        <form onSubmit={submit} className="stack">
-          <label>
-            Username
-            <input value={username} onChange={(event) => setUsername(event.target.value)} />
-          </label>
-          <label>
-            Password
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPasswordValue(event.target.value)}
-            />
-          </label>
-          {error && <p className="error">{error}</p>}
-          <button className="primary" disabled={isLoading}>
-            {isLoading ? "Signing in..." : "Sign in"}
-          </button>
-        </form>
+        <div className="login-form-panel">
+          <div>
+            <p className="eyebrow">Praxis Form</p>
+            <h2>Admin login</h2>
+            <p className="muted">Manage patient-facing forms, publish updates, and review submissions.</p>
+          </div>
+          <form onSubmit={submit} className="stack">
+            <label>
+              Username
+              <input value={username} onChange={(event) => setUsername(event.target.value)} />
+            </label>
+            <label>
+              Password
+              <input
+                type="password"
+                value={password}
+                onChange={(event) => setPasswordValue(event.target.value)}
+              />
+            </label>
+            {error && <p className="error">{error}</p>}
+            <button className="primary" disabled={isLoading}>
+              {isLoading ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
+        </div>
       </section>
     </main>
   );
@@ -241,10 +252,15 @@ function AdminShell({
       </aside>
 
       <section className="workspace">
-        <header className="topbar">
-          <div>
+        <header className="topbar dashboard-hero">
+          <div className="dashboard-copy">
+            <p className="eyebrow">Clinic operations</p>
             <h2>{view === "forms" ? "Form management" : "Submission inbox"}</h2>
             <p className="muted">Build and publish structured intake forms for patients.</p>
+            <div className="trust-row">
+              <span><ShieldCheck size={16} /> Admin access</span>
+              <span><CheckCircle2 size={16} /> Live form status</span>
+            </div>
           </div>
           <div className="top-actions">
             <button className="secondary" onClick={() => navigate("/")}>
@@ -527,22 +543,46 @@ function PublicForms({ navigate }: { navigate: (path: string) => void }) {
 
   return (
     <main className="public-page">
-      <header className="public-header">
-        <div>
+      <section className="public-hero">
+        <img src="/images/clinic-hero.png" alt="Modern clinic reception with a digital form tablet" />
+        <div className="public-hero-copy">
           <p className="eyebrow">Praxis Form</p>
           <h1>Patient forms</h1>
-          <p className="muted">Choose the form requested by the practice.</p>
+          <p>Choose the form requested by the practice and complete it before your appointment.</p>
+          <div className="hero-actions">
+            <button className="primary" onClick={() => document.getElementById("forms")?.scrollIntoView()}>
+              View forms <ArrowRight size={18} />
+            </button>
+            <button className="secondary" onClick={() => navigate("/login")}>
+              Admin
+            </button>
+          </div>
         </div>
-        <button className="secondary" onClick={() => navigate("/login")}>
-          Admin
-        </button>
-      </header>
+      </section>
+      <section className="public-intro">
+        <article>
+          <ShieldCheck size={22} />
+          <span>Secure intake</span>
+        </article>
+        <article>
+          <FileText size={22} />
+          <span>Structured forms</span>
+        </article>
+        <article>
+          <ClipboardList size={22} />
+          <span>Faster check-in</span>
+        </article>
+      </section>
       {error && <p className="error">{error}</p>}
-      <section className="public-list">
+      <section className="public-list" id="forms">
         {forms.map((form) => (
           <button key={form._id} className="public-form-row" onClick={() => navigate(`/public/form/${form._id}`)}>
-            <span>{form.title}</span>
-            <small>{form.description}</small>
+            <img src="/images/patient-form.png" alt="" />
+            <span>
+              <strong>{form.title}</strong>
+              <small>{form.description}</small>
+            </span>
+            <ArrowRight size={20} />
           </button>
         ))}
       </section>
@@ -592,10 +632,13 @@ function PublicForm({ formId, navigate }: { formId: string; navigate: (path: str
         Back to forms
       </button>
       <section className="patient-form">
-        <header>
-          <p className="eyebrow">Praxis Form</p>
-          <h1>{form.title}</h1>
-          <p className="muted">{form.description}</p>
+        <header className="patient-form-header">
+          <img src="/images/patient-form.png" alt="Patient completing a digital intake form" />
+          <div>
+            <p className="eyebrow">Praxis Form</p>
+            <h1>{form.title}</h1>
+            <p className="muted">{form.description}</p>
+          </div>
         </header>
         <form onSubmit={submit} className="stack">
           <div className="form-grid">
@@ -723,4 +766,3 @@ function FieldInput({
     </label>
   );
 }
-
